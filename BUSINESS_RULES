@@ -1,0 +1,10 @@
+#Password=<< Existing password/certificate removed on export >>
+#
+#Wed Jun 27 14:55:30 UTC 2018
+Description=bpmrulesruntime
+Type=HTTP
+Authentication=BasicAuthentication
+Name=BUSINESS_RULES
+ProxyType=Internet
+URL=https\://bpmrulesruntimebpm-i077837trial.hanatrial.ondemand.com
+User=i077837
