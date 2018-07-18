@@ -24,7 +24,9 @@ var product = {
 // write 'product' node to workflow context
 $.context.product = product;
 */
-
+if($.context.changeType=="FileUpload"){
+	$.context.applyRules = false;
+}
 
 
 $.context.InvokeRuleService = {};
