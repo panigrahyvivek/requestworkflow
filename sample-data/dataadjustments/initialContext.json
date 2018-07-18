@@ -1,7 +1,13 @@
 {
-  "changeId": "default",
-  "masterDataAvilable": false,
-  "approvalNeeded":true,
-  "Account": 22020003,
+  
+  "overallfilters":{
+  	"executionTime":"",
+  	"businessScenario": "",
+  	"restatementId":"",
+  	"masterDataEffectivedate":""
+  },
+  "aifpayload":{
+  	
+  },
   "status": "Initiated"
 }

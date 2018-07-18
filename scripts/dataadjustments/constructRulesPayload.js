@@ -26,16 +26,29 @@ $.context.product = product;
 */
 
 
-var accountDetails = {};
 
-accountDetails. __type__ = "AccountDetails";
-accountDetails.CompanyCode = 1;
-accountDetails.Account = 222;
+$.context.InvokeRuleService = {};
+$.context.InvokeRuleService.url = "/rules-service/rest/v1/rule-services/java/Reclassification/RequestRuleService";
+$.context.InvokeRuleService.request = {};
+$.context.InvokeRuleService.response = {};
 
 
-$.context.accountDetails = accountDetails;
+$.context.S4HANAService = {};
+$.context.S4HANAService.url= "/s4hanaconnect";
+$.context.S4HANAService.request = {
+	"key": "value"
+};
+$.context.S4HANAService.response = {};
 
-$.context.output = {}; 
+/* Sample request Object
+var ruleServiceRequest = {};
+ruleServiceRequest. __type__ = "AccountDetails";
+ruleServiceRequest.CompanyCode = 1;
+ruleServiceRequest.Account = 222;
+*/
+
+$.context.InvokeRuleService.request = $.context.userInput;
+
 
 
 
