@@ -24,21 +24,28 @@ var product = {
 // write 'product' node to workflow context
 $.context.product = product;
 */
-if($.context.changeType=="FileUpload"){
+if($.context.changeType=="retumble_manual"){
 	$.context.applyRules = false;
 }
+else{
+	$.context.applyRules = true;
+}
 
-
-$.context.InvokeRuleService = {};
-$.context.InvokeRuleService.url = "/rules-service/rest/v1/rule-services/java/Reclassification/RequestRuleService";
-$.context.InvokeRuleService.request = {};
-$.context.InvokeRuleService.response = {};
+if($.context.applyRules == "true"){
+	$.context.InvokeRuleService = {};
+	$.context.InvokeRuleService.url = "/rules-service/rest/v1/rule-services/java/Reclassification/LR01_RuleService";
+	$.context.InvokeRuleService.request = {};
+	$.context.InvokeRuleService.response = {};	
+	$.context.InvokeRuleService.request = $.context.userInput;
+	$.context.InvokeRuleService.request.__type__ = $.context.changeType;
+}
 
 
 $.context.S4HANAService = {};
 $.context.S4HANAService.url= "/s4hanaconnect";
 $.context.S4HANAService.request = {
-	"key": "value"
+	"IFilepath" : "DummyPath",
+	"Type": true
 };
 $.context.S4HANAService.response = {};
 
@@ -49,7 +56,7 @@ ruleServiceRequest.CompanyCode = 1;
 ruleServiceRequest.Account = 222;
 */
 
-$.context.InvokeRuleService.request = $.context.userInput;
+
 
 
 
