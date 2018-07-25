@@ -24,7 +24,10 @@ var product = {
 // write 'product' node to workflow context
 $.context.product = product;
 */
-if($.context.changeType=="retumble_manual"){
+
+var changeType = $.context.__metadata__.changeType;
+
+if(changeType=="retumble_manual"){
 	$.context.applyRules = false;
 }
 else{
@@ -37,16 +40,38 @@ if($.context.applyRules == "true"){
 	$.context.InvokeRuleService.request = {};
 	$.context.InvokeRuleService.response = {};	
 	$.context.InvokeRuleService.request = $.context.userInput;
-	$.context.InvokeRuleService.request.__type__ = $.context.changeType;
+	$.context.InvokeRuleService.request.__type__ = changeType;
 }
 
 
 $.context.S4HANAService = {};
-$.context.S4HANAService.url= "/s4hanaconnect";
-$.context.S4HANAService.request = {
-	"IFilepath" : "DummyPath",
-	"Type": true
-};
+$.context.S4HANAService.url= "";
+$.context.S4HANAService.request = {};
+
+if(changeType=="retumble_manual"){
+	$.context.S4HANAService.url = "/s4connectodata/triggerFlatFlieWorkflow";
+	$.context.S4HANAService.request = {
+		"IFilePath" : $.context.userInput.filePath,
+		"IRestId": "125435"
+	};
+	
+}
+else if(changeType == "retumbling_mgmtact"){
+	$.context.S4HANAService.url = "/s4connectodata/triggerRestatementsWorkflow";
+	$.context.S4HANAService.request = {};
+	$.context.S4HANAService.request.BusId = $.context.filterInput.businessScenario;
+	$.context.S4HANAService.request.RestId = $.context.filterInput.restatementId;
+	$.context.S4HANAService.request.SourceGeo = "US";
+	$.context.S4HANAService.request.RuleId = "2a2ee09cb4174b6e8c532bb9dd86a2aa";
+	
+	/*{
+		"BusId" : "1718.AL01",
+		"RestId": "62",
+		"SourceGeo": "US",
+		"RuleId": "005056AB14FE1EE8A3E058405365C697"
+	};*/
+}
+
 $.context.S4HANAService.response = {};
 
 /* Sample request Object
