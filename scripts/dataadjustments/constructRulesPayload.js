@@ -27,11 +27,11 @@ $.context.product = product;
 
 var changeType = $.context.__metadata__.changeType;
 
-if(changeType=="retumble_manual"){
-	$.context.applyRules = false;
+if(changeType=="reclass_account"){
+	$.context.applyRules = true;
 }
 else{
-	$.context.applyRules = true;
+	$.context.applyRules = false;
 }
 
 if($.context.applyRules == "true"){
@@ -52,24 +52,33 @@ if(changeType=="retumble_manual"){
 	$.context.S4HANAService.url = "/s4connectodata/triggerFlatFlieWorkflow";
 	$.context.S4HANAService.request = {
 		"IFilePath" : $.context.userInput.filePath,
-		"IRestId": "125435"
+		"IRestId": $.context.filterInput.restatementId,
+		"ITimestamp": $.context.filterInput.systemPostingTimestamp
 	};
 	
 }
-else if(changeType == "retumbling_mgmtact"){
+else if(changeType == "retumble_mgmtact"){
 	$.context.S4HANAService.url = "/s4connectodata/triggerRestatementsWorkflow";
 	$.context.S4HANAService.request = {};
-	$.context.S4HANAService.request.BusId = $.context.filterInput.businessScenario;
-	$.context.S4HANAService.request.RestId = $.context.filterInput.restatementId;
-	$.context.S4HANAService.request.SourceGeo = "US";
-	$.context.S4HANAService.request.RuleId = "2a2ee09cb4174b6e8c532bb9dd86a2aa";
-	
-	/*{
-		"BusId" : "1718.AL01",
-		"RestId": "62",
-		"SourceGeo": "US",
-		"RuleId": "005056AB14FE1EE8A3E058405365C697"
-	};*/
+	$.context.S4HANAService.request = {
+		"BusId": $.context.filterInput.businessScenario,
+		"RestId": $.context.filterInput.restatementId,
+		"RuleId": $.context.__metadata__.ruleId,
+		"ProjId": $.context.__metadata__.projectId
+	};
+}
+
+else if(changeType == "reclass_account"){
+	$.context.S4HANAService.url = "/s4connectodata/triggerReclassificationWorkflow";
+	$.context.S4HANAService.request = {};
+	$.context.S4HANAService.request = {
+		"ICaccount": "",
+		"ICompcode": $.context.userInput.companyCode,
+		"IDaccount":"",
+		"IFiscpriod":$.context.filterInput.period,
+		"IFiscyear":$.context.filterInput.Year,
+		"IProfirctr":""
+	};
 }
 
 $.context.S4HANAService.response = {};
