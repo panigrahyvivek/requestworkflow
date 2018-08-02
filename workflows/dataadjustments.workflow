@@ -44,6 +44,9 @@
 				},
 				"fdfe2375-c8a3-4262-abe9-d6f599e6fb3a": {
 					"name": "Fetch Rule Definition for Restatements"
+				},
+				"9d20b571-07b9-43ae-82f8-e1fe40d5a470": {
+					"name": "Process Rule Definition"
 				}
 			},
 			"sequenceFlows": {
@@ -83,11 +86,14 @@
 				"af5fd1b2-332f-4d87-bbb2-ebd54b00c248": {
 					"name": "SequenceFlow24"
 				},
-				"048e744d-05f2-4201-8f8c-4c588fd7e31e": {
-					"name": "SequenceFlow25"
-				},
 				"cb229e97-46b5-48f8-babb-1e4df6cd5018": {
 					"name": "SequenceFlow26"
+				},
+				"ab8f9df9-f585-4845-90dd-72fe5bbdea5b": {
+					"name": "SequenceFlow29"
+				},
+				"ebc288df-532d-4c8e-a33d-a807ce9a709e": {
+					"name": "SequenceFlow30"
 				}
 			},
 			"diagrams": {
@@ -131,7 +137,7 @@
 		},
 		"aee60677-640c-4280-b846-87f75469f966": {
 			"classDefinition": "com.sap.bpm.wfs.ScriptTask",
-			"reference": "/scripts/dataadjustments/constructRulesPayload.js",
+			"reference": "/scripts/dataadjustments/constructInitialPayload.js",
 			"id": "scripttask1",
 			"name": "Manage Initial Payload"
 		},
@@ -168,6 +174,27 @@
 			"reference": "/scripts/dataadjustments/postRuleServicePayload.js",
 			"id": "scripttask2",
 			"name": "Maintain payload from Rule Service"
+		},
+		"4650780c-4d48-4d2f-8078-79e4f1ec0cab": {
+			"classDefinition": "com.sap.bpm.wfs.ExclusiveGateway",
+			"id": "exclusivegateway4",
+			"name": "ExclusiveGateway4",
+			"default": "cb229e97-46b5-48f8-babb-1e4df6cd5018"
+		},
+		"fdfe2375-c8a3-4262-abe9-d6f599e6fb3a": {
+			"classDefinition": "com.sap.bpm.wfs.ServiceTask",
+			"destination": "BUSINESS_RULES_REPOSITORY",
+			"path": "/rules-service/rest/v1/projects/b403800df52b4b8992ac98d0af1597d5/rules/2a2ee09cb4174b6e8c532bb9dd86a2aa",
+			"httpMethod": "GET",
+			"responseVariable": "${context.S4HANAService.request.IRuleData}",
+			"id": "servicetask3",
+			"name": "Fetch Rule Definition for Restatements"
+		},
+		"9d20b571-07b9-43ae-82f8-e1fe40d5a470": {
+			"classDefinition": "com.sap.bpm.wfs.ScriptTask",
+			"reference": "/scripts/dataadjustments/processRuleDefinition.js",
+			"id": "scripttask4",
+			"name": "Process Rule Definition"
 		},
 		"a50e196f-f87e-417b-bd44-939038a7d6a1": {
 			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
@@ -248,6 +275,35 @@
 			"sourceRef": "d11ebec8-36a2-4afd-b590-7c7a982797ee",
 			"targetRef": "ac5e4850-36d2-4417-a675-3b8a64e9cc79"
 		},
+		"af5fd1b2-332f-4d87-bbb2-ebd54b00c248": {
+			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
+			"condition": "${context.__metadata__.changeType== 'retumble_mgmtact'}",
+			"id": "sequenceflow24",
+			"name": "SequenceFlow24",
+			"sourceRef": "4650780c-4d48-4d2f-8078-79e4f1ec0cab",
+			"targetRef": "fdfe2375-c8a3-4262-abe9-d6f599e6fb3a"
+		},
+		"cb229e97-46b5-48f8-babb-1e4df6cd5018": {
+			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
+			"id": "sequenceflow26",
+			"name": "SequenceFlow26",
+			"sourceRef": "4650780c-4d48-4d2f-8078-79e4f1ec0cab",
+			"targetRef": "56e342ba-11b9-4fa6-bf29-a9cda5119ce0"
+		},
+		"ab8f9df9-f585-4845-90dd-72fe5bbdea5b": {
+			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
+			"id": "sequenceflow29",
+			"name": "SequenceFlow29",
+			"sourceRef": "fdfe2375-c8a3-4262-abe9-d6f599e6fb3a",
+			"targetRef": "9d20b571-07b9-43ae-82f8-e1fe40d5a470"
+		},
+		"ebc288df-532d-4c8e-a33d-a807ce9a709e": {
+			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
+			"id": "sequenceflow30",
+			"name": "SequenceFlow30",
+			"sourceRef": "9d20b571-07b9-43ae-82f8-e1fe40d5a470",
+			"targetRef": "56e342ba-11b9-4fa6-bf29-a9cda5119ce0"
+		},
 		"18054ba5-5849-4761-a5db-40daade2b51a": {
 			"classDefinition": "com.sap.bpm.wfs.ui.Diagram",
 			"symbols": {
@@ -275,8 +331,10 @@
 				"cf6b4151-d690-4bb1-bb41-29a9f956cc00": {},
 				"75293942-c80c-49f7-96af-65b94f414017": {},
 				"3a582917-13e6-4448-9625-54cefcd698e8": {},
-				"458d932d-b098-499d-833b-a032aa8caab1": {},
-				"797a575a-9bf0-48a1-b51e-f61037834528": {}
+				"797a575a-9bf0-48a1-b51e-f61037834528": {},
+				"9009f7f0-d080-4590-8296-e54216c37991": {},
+				"956b76d7-3dea-47ad-bc2b-030c881bc13f": {},
+				"d8708422-5f78-4fe3-9937-ebaa3d6b450a": {}
 			}
 		},
 		"dc98eed2-29eb-474b-bd9c-3565e14bda78": {
@@ -294,7 +352,7 @@
 		},
 		"301db01b-97fe-40de-9743-b43015bd60b8": {
 			"classDefinition": "com.sap.bpm.wfs.ui.EndEventSymbol",
-			"x": 1539.9999928474426,
+			"x": 1689.9999928474426,
 			"y": 66.99999970197678,
 			"width": 32,
 			"height": 32,
@@ -333,7 +391,7 @@
 		},
 		"b4b449e3-07a4-4dde-a5ac-ff70756766a7": {
 			"classDefinition": "com.sap.bpm.wfs.ui.ServiceTaskSymbol",
-			"x": 1219.9999940395355,
+			"x": 1369.9999940395355,
 			"y": 70.99999940395355,
 			"width": 100,
 			"height": 60,
@@ -375,7 +433,7 @@
 		},
 		"21daa87a-2d67-444f-99b0-91b417e43317": {
 			"classDefinition": "com.sap.bpm.wfs.ui.MailTaskSymbol",
-			"x": 1369.9999940395355,
+			"x": 1519.9999940395355,
 			"y": 70.99999940395355,
 			"width": 100,
 			"height": 60,
@@ -383,14 +441,14 @@
 		},
 		"025df662-0dda-486d-8a87-0d381e1b58bc": {
 			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
-			"points": "1319.9999940395355,100.99999940395355 1369.9999940395355,100.99999940395355",
+			"points": "1469.9999940395355,100.99999940395355 1519.9999940395355,100.99999940395355",
 			"sourceSymbol": "b4b449e3-07a4-4dde-a5ac-ff70756766a7",
 			"targetSymbol": "21daa87a-2d67-444f-99b0-91b417e43317",
 			"object": "37b749d9-ae88-4cb5-a73c-281ce1e77504"
 		},
 		"03bf3aab-b6aa-4cca-9e82-9659e824e2bd": {
 			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
-			"points": "1469.9999940395355,100.99999940395355 1504.999993443489,100.99999940395355 1504.999993443489,82.99999970197678 1539.9999928474426,82.99999970197678",
+			"points": "1619.9999940395355,100.99999940395355 1654.999993443489,100.99999940395355 1654.999993443489,82.99999970197678 1689.9999928474426,82.99999970197678",
 			"sourceSymbol": "21daa87a-2d67-444f-99b0-91b417e43317",
 			"targetSymbol": "301db01b-97fe-40de-9743-b43015bd60b8",
 			"object": "a319c625-6cdd-497d-bcfb-fd7ce13ebc1a"
@@ -410,7 +468,7 @@
 		},
 		"02d7c445-a827-4486-b142-69f08feff45d": {
 			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
-			"points": "867.9999976158142,82.99999970197678 902.9999970197678,82.99999970197678 902.9999970197678,44 1014.9999958276749,44 1014.9999958276749,12 1184.999994635582,12 1184.999994635582,35 1504.999993443489,35 1504.999993443489,82.99999970197678 1539.9999928474426,82.99999970197678",
+			"points": "867.9999976158142,82.99999970197678 902.9999970197678,82.99999970197678 902.9999970197678,44 1014.9999958276749,44 1014.9999958276749,12 1334.999994635582,12 1334.999994635582,35 1654.999993443489,35 1654.999993443489,82.99999970197678 1689.9999928474426,82.99999970197678",
 			"sourceSymbol": "723f56f7-3589-403a-8cf8-fb1490ea847e",
 			"targetSymbol": "301db01b-97fe-40de-9743-b43015bd60b8",
 			"object": "ab53d90b-1d36-491f-8b63-8c9285fad396"
@@ -437,17 +495,67 @@
 			"targetSymbol": "b4c559cf-4255-4706-ae41-467f27eb3d5d",
 			"object": "58f5332a-6676-41b7-b34b-7c04d7146a13"
 		},
+		"cf6b4151-d690-4bb1-bb41-29a9f956cc00": {
+			"classDefinition": "com.sap.bpm.wfs.ui.ExclusiveGatewaySymbol",
+			"x": 937.9999964237213,
+			"y": 79.99999940395355,
+			"object": "4650780c-4d48-4d2f-8078-79e4f1ec0cab"
+		},
+		"75293942-c80c-49f7-96af-65b94f414017": {
+			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
+			"points": "979.9999964237213,100.99999940395355 1014.9999958276749,100.99999940395355 1014.9999958276749,123.99999940395355 1049.9999952316284,123.99999940395355",
+			"sourceSymbol": "cf6b4151-d690-4bb1-bb41-29a9f956cc00",
+			"targetSymbol": "3a582917-13e6-4448-9625-54cefcd698e8",
+			"object": "af5fd1b2-332f-4d87-bbb2-ebd54b00c248"
+		},
+		"3a582917-13e6-4448-9625-54cefcd698e8": {
+			"classDefinition": "com.sap.bpm.wfs.ui.ServiceTaskSymbol",
+			"x": 1049.9999952316284,
+			"y": 93.99999940395355,
+			"width": 100,
+			"height": 60,
+			"object": "fdfe2375-c8a3-4262-abe9-d6f599e6fb3a"
+		},
+		"797a575a-9bf0-48a1-b51e-f61037834528": {
+			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
+			"points": "979.9999964237213,100.99999940395355 1014.9999958276749,100.99999940395355 1014.9999958276749,58 1334.999994635582,58 1334.999994635582,100.99999940395355 1369.9999940395355,100.99999940395355",
+			"sourceSymbol": "cf6b4151-d690-4bb1-bb41-29a9f956cc00",
+			"targetSymbol": "b4b449e3-07a4-4dde-a5ac-ff70756766a7",
+			"object": "cb229e97-46b5-48f8-babb-1e4df6cd5018"
+		},
+		"9009f7f0-d080-4590-8296-e54216c37991": {
+			"classDefinition": "com.sap.bpm.wfs.ui.ScriptTaskSymbol",
+			"x": 1199.9999952316284,
+			"y": 93.99999940395355,
+			"width": 100,
+			"height": 60,
+			"object": "9d20b571-07b9-43ae-82f8-e1fe40d5a470"
+		},
+		"956b76d7-3dea-47ad-bc2b-030c881bc13f": {
+			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
+			"points": "1149.9999952316284,123.99999940395355 1199.9999952316284,123.99999940395355",
+			"sourceSymbol": "3a582917-13e6-4448-9625-54cefcd698e8",
+			"targetSymbol": "9009f7f0-d080-4590-8296-e54216c37991",
+			"object": "ab8f9df9-f585-4845-90dd-72fe5bbdea5b"
+		},
+		"d8708422-5f78-4fe3-9937-ebaa3d6b450a": {
+			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
+			"points": "1299.9999952316284,123.99999940395355 1334.999994635582,123.99999940395355 1334.999994635582,100.99999940395355 1369.9999940395355,100.99999940395355",
+			"sourceSymbol": "9009f7f0-d080-4590-8296-e54216c37991",
+			"targetSymbol": "b4b449e3-07a4-4dde-a5ac-ff70756766a7",
+			"object": "ebc288df-532d-4c8e-a33d-a807ce9a709e"
+		},
 		"2e0e98a2-537a-47df-baed-debfb222e193": {
 			"classDefinition": "com.sap.bpm.wfs.LastIDs",
 			"timereventdefinition": 2,
 			"maildefinition": 1,
 			"hubapireference": 2,
-			"sequenceflow": 26,
+			"sequenceflow": 30,
 			"startevent": 1,
 			"endevent": 1,
 			"usertask": 1,
-			"servicetask": 3,
-			"scripttask": 2,
+			"servicetask": 4,
+			"scripttask": 4,
 			"mailtask": 1,
 			"exclusivegateway": 4,
 			"parallelgateway": 1
@@ -459,78 +567,6 @@
 			"subject": "Mail test",
 			"text": "${context.S4HANAService.response}",
 			"id": "maildefinition1"
-		},
-		"4650780c-4d48-4d2f-8078-79e4f1ec0cab": {
-			"classDefinition": "com.sap.bpm.wfs.ExclusiveGateway",
-			"id": "exclusivegateway4",
-			"name": "ExclusiveGateway4",
-			"default": "cb229e97-46b5-48f8-babb-1e4df6cd5018"
-		},
-		"cf6b4151-d690-4bb1-bb41-29a9f956cc00": {
-			"classDefinition": "com.sap.bpm.wfs.ui.ExclusiveGatewaySymbol",
-			"x": 937.9999964237213,
-			"y": 79.99999940395355,
-			"object": "4650780c-4d48-4d2f-8078-79e4f1ec0cab"
-		},
-		"af5fd1b2-332f-4d87-bbb2-ebd54b00c248": {
-			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
-			"condition": "${context.__metadata__.changeType== 'retumble_mgmtact'}",
-			"id": "sequenceflow24",
-			"name": "SequenceFlow24",
-			"sourceRef": "4650780c-4d48-4d2f-8078-79e4f1ec0cab",
-			"targetRef": "fdfe2375-c8a3-4262-abe9-d6f599e6fb3a"
-		},
-		"75293942-c80c-49f7-96af-65b94f414017": {
-			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
-			"points": "979.9999964237213,100.99999940395355 1014.9999958276749,100.99999940395355 1014.9999958276749,123.99999940395355 1049.4999952316284,123.99999940395355",
-			"sourceSymbol": "cf6b4151-d690-4bb1-bb41-29a9f956cc00",
-			"targetSymbol": "3a582917-13e6-4448-9625-54cefcd698e8",
-			"object": "af5fd1b2-332f-4d87-bbb2-ebd54b00c248"
-		},
-		"fdfe2375-c8a3-4262-abe9-d6f599e6fb3a": {
-			"classDefinition": "com.sap.bpm.wfs.ServiceTask",
-			"destination": "BUSINESS_RULES_REPOSITORY",
-			"path": "/rules-service/rest/v1/projects/b403800df52b4b8992ac98d0af1597d5/rules/2a2ee09cb4174b6e8c532bb9dd86a2aa",
-			"httpMethod": "GET",
-			"responseVariable": "${context.S4HANAService.request.IRuleData}",
-			"id": "servicetask3",
-			"name": "Fetch Rule Definition for Restatements"
-		},
-		"3a582917-13e6-4448-9625-54cefcd698e8": {
-			"classDefinition": "com.sap.bpm.wfs.ui.ServiceTaskSymbol",
-			"x": 1049.9999952316284,
-			"y": 93.99999940395355,
-			"width": 100,
-			"height": 60,
-			"object": "fdfe2375-c8a3-4262-abe9-d6f599e6fb3a"
-		},
-		"048e744d-05f2-4201-8f8c-4c588fd7e31e": {
-			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
-			"id": "sequenceflow25",
-			"name": "SequenceFlow25",
-			"sourceRef": "fdfe2375-c8a3-4262-abe9-d6f599e6fb3a",
-			"targetRef": "56e342ba-11b9-4fa6-bf29-a9cda5119ce0"
-		},
-		"458d932d-b098-499d-833b-a032aa8caab1": {
-			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
-			"points": "1149.9999952316284,123.99999940395355 1184.999994635582,123.99999940395355 1184.999994635582,100.99999940395355 1219.9999940395355,100.99999940395355",
-			"sourceSymbol": "3a582917-13e6-4448-9625-54cefcd698e8",
-			"targetSymbol": "b4b449e3-07a4-4dde-a5ac-ff70756766a7",
-			"object": "048e744d-05f2-4201-8f8c-4c588fd7e31e"
-		},
-		"cb229e97-46b5-48f8-babb-1e4df6cd5018": {
-			"classDefinition": "com.sap.bpm.wfs.SequenceFlow",
-			"id": "sequenceflow26",
-			"name": "SequenceFlow26",
-			"sourceRef": "4650780c-4d48-4d2f-8078-79e4f1ec0cab",
-			"targetRef": "56e342ba-11b9-4fa6-bf29-a9cda5119ce0"
-		},
-		"797a575a-9bf0-48a1-b51e-f61037834528": {
-			"classDefinition": "com.sap.bpm.wfs.ui.SequenceFlowSymbol",
-			"points": "979.9999964237213,100.99999940395355 1014.9999958276749,100.99999940395355 1014.9999958276749,58 1184.999994635582,58 1184.999994635582,100.99999940395355 1219.9999940395355,100.99999940395355",
-			"sourceSymbol": "cf6b4151-d690-4bb1-bb41-29a9f956cc00",
-			"targetSymbol": "b4b449e3-07a4-4dde-a5ac-ff70756766a7",
-			"object": "cb229e97-46b5-48f8-babb-1e4df6cd5018"
 		}
 	}
 }

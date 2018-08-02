@@ -27,6 +27,8 @@ $.context.product = product;
 
 var changeType = $.context.__metadata__.changeType;
 
+$.context.subject = changeType;
+
 if(changeType=="reclass_account"){
 	$.context.applyRules = true;
 }
@@ -78,6 +80,17 @@ else if(changeType == "reclass_account"){
 		"IFiscpriod":$.context.filterInput.period,
 		"IFiscyear":$.context.filterInput.Year,
 		"IProfirctr":""
+	};
+}
+
+else if(changeType == "retumble_mgmtact"){
+	$.context.S4HANAService.url = "/s4connectodata/triggerControlTableWorkflow";
+	$.context.S4HANAService.request = {};
+	$.context.S4HANAService.request = {
+		"BusId": $.context.filterInput.businessScenario,
+		"RestId": $.context.filterInput.restatementId,
+		"RuleId": $.context.__metadata__.ruleId,
+		"ProjId": $.context.__metadata__.projectId
 	};
 }
 
