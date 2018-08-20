@@ -83,15 +83,23 @@ else if(changeType == "reclass_account"){
 	};
 }
 
-else if(changeType == "retumble_mgmtact"){
+else if(changeType == "ControlTableInput"){
 	$.context.S4HANAService.url = "/s4connectodata/triggerControlTableWorkflow";
 	$.context.S4HANAService.request = {};
-	$.context.S4HANAService.request = {
-		"BusId": $.context.filterInput.businessScenario,
-		"RestId": $.context.filterInput.restatementId,
-		"RuleId": $.context.__metadata__.ruleId,
-		"ProjId": $.context.__metadata__.projectId
-	};
+	var tempObj = $.context.userInput;
+	for(var i=0;i<tempObj.length;i++){
+		tempObj[i].ParVal1 = tempObj[i].value1;
+		tempObj[i].ParVal2 = tempObj[i].value2;
+		tempObj[i].ParVal3 = tempObj[i].value3;
+		
+		delete tempObj[i].key;
+		delete tempObj[i].value1;
+		delete tempObj[i].value2;
+		delete tempObj[i].value3;
+		delete tempObj[i].value3;
+		delete tempObj[i].__metadata;
+	}
+	$.context.S4HANAService.request = tempObj;
 }
 
 $.context.S4HANAService.response = {};
