@@ -25,8 +25,13 @@ var product = {
 $.context.product = product;
 */
 
+var instanceId = $.info.workflowInstanceId;
+
+var formid = $.context.formid;
 var backendApprovers = $.context.approvers.d.results;
 var backedUserDetailsForRule = [];
+
+
 
 for(var i=0;i<backendApprovers.length;i++){
 	var formattedBackendUser = {};
@@ -41,19 +46,41 @@ $.context.backedUserDetailsForRule = backedUserDetailsForRule;
 var statusPayloads = {};
 
 statusPayloads.APPROVAL_STARTED = {
-	"formid": "804",
+	"formid": formid,
 	"status": "Approval Started"
 };
 
 statusPayloads.APPROVED_SETTLEMENT_IN_PROGRESS = {
-	"formid": "804",
-	"status": "Approved - Settlement in process"
+	"formid": formid,
+	"status": "Approval Complete"
 };
 
 statusPayloads.FORM_REJECTED = {
-	"formid": "804",
+	"formid": formid,
 	"status": "Form Rejected"
+};
+
+var settlementPayload = {};
+
+settlementPayload = {
+	"formid": formid
 };
 
 $.context.statusPayloads = statusPayloads;
 $.context.statusResponse = {};
+$.context.statusResponse.settlement = {};
+
+$.context.settlementPayload = settlementPayload;
+$.context.settlementResponse = {};
+
+$.context.formupdate = {
+	servicePath: "/sap/opu/odata/sap/ZPGPOCROC_SRV/ZROC_I_FORM('" + formid + "')",
+	settlmentServicePath: "/sap/opu/odata/sap/ZPGPOCROC_SRV/ZROC_Get_Status?formid='" + formid + "'&WfInstanceId='" + instanceId + "'"
+};
+
+
+$.context.workflowInstanceUpdatePayload= {
+	"status": "suspended"	
+};
+
+$.context.workflowInstanceUpdateResponse = {};

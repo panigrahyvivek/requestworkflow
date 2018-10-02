@@ -42,11 +42,17 @@ for(i=0;i<cloudApprovers.length;i++ ){
 		waveAppsApprovers.push(cloudApprovers[i].cUserId);	
 	}
 	else if(cloudApprovers[i].role === "RM"){
-		mandatoryApprovers.push(cloudApprovers[i].cUserId)
+		mandatoryApprovers.push(cloudApprovers[i].cUserId);
 	}
 }
 
 agent98Approvers.push('I077837');
+// agent98Approvers.push('I827486');
+
+waveAppsApprovers.push('I077837');
+waveAppsApprovers.push('I827486');
+mandatoryApprovers.push('I077837');
+mandatoryApprovers.push('I827486');
 
 $.context.agent98Approvers = agent98Approvers;
 $.context.waveAppsApprovers = waveAppsApprovers;
